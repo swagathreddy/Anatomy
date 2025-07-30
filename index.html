@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-g">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Floor Features Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* General Body and Font Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to top, #e0c3fc 0%, #8ec5fc 100%);
+            color: #062a55;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Screen container styles */
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        h1, h2 {
+            color: #0d47a1;
+            font-weight: 700;
+        }
+
+        h1 { font-size: 2.5em; }
+        h2 { font-size: 2em; }
+        #clue-screen .screen-header h2 { margin-bottom: 5px; }
+
+        .instructions-text {
+            text-align: left;
+            max-width: 800px;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        #clue-screen h2 + p {
+            margin-top: 5px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #2196F3, #1565C0);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        button:not(.nav-button):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* --- NEW: Header for Back Button and Title --- */
+        .screen-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .screen-header h2 {
+            margin: 0;
+            flex-grow: 1;
+        }
+        .header-spacer {
+            width: 90px;
+            flex-shrink: 0;
+        }
+        
+        /* --- NEW: Back Button Styling --- */
+        .back-button {
+            background: none;
+            border: 2px solid #0d47a1;
+            color: #0d47a1;
+            padding: 8px 16px;
+            font-size: 14px;
+            margin-top: 0;
+            box-shadow: none;
+            width: 90px;
+            flex-shrink: 0;
+        }
+        .back-button:hover {
+            background: #0d47a1;
+            color: white;
+            transform: none; /* Override global hover effect */
+        }
+
+
+        #timer {
+            font-size: 3em;
+            font-weight: 700;
+            color: #d32f2f;
+            margin: 0 0 15px 0;
+        }
+
+        #ocean-map-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 5px solid #aed6f1;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        #ocean-map {
+            width: 1200px;
+            max-width: none;
+            height: auto;
+            display: block;
+        }
+
+        #clue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .feature-card-container {
+            perspective: 1000px;
+        }
+
+        .clue-card, .answer-card {
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .clue-card:hover {
+            transform: scale(1.03);
+        }
+
+        .clue-card img, .answer-card img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+        }
+
+        .answer-card {
+            display: none;
+            margin-top: 15px;
+            border: 4px solid #4CAF50;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .answer-card.revealed {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #mobile-carousel-container {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .screen { padding: 15px; }
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            #timer { font-size: 2.5em; }
+            #ocean-map { width: 800px; }
+            .header-spacer { width: 80px; }
+            .back-button { width: 80px; }
+            #clue-grid { display: none; }
+            
+            #mobile-carousel-container {
+                display: flex;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            #mobile-carousel-window {
+                width: 100%;
+                overflow: hidden;
+            }
+
+            #mobile-carousel-track {
+                display: flex;
+                transition: transform 0.4s ease-in-out;
+            }
+            
+            #mobile-carousel-track .feature-card-container {
+                position: relative;
+                flex: 0 0 100%;
+                box-sizing: border-box;
+                padding: 0 5px;
+            }
+
+            .nav-button {
+                position: absolute;
+                top: 40%;
+                transform: translateY(-50%);
+                z-index: 10;
+                background-color: rgba(0, 0, 0, 0.4);
+                border: none;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                cursor: pointer;
+                transition: background-color 0.2s ease, top 0.4s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+            }
+
+            .nav-button:hover {
+                background-color: rgba(0, 0, 0, 0.7);
+                transform: translateY(-50%) scale(1.1);
+            }
+            
+            .nav-button svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .prev-nav { left: 15px; }
+            .next-nav { right: 15px; }
+            
+            #mobile-carousel-track .feature-card-container.is-revealed .nav-button {
+                top: 25%; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen" class="screen active">
+        <h1>Ocean Floor Adventure 🌊</h1>
+        <p>A classroom game to learn about ocean topography.</p>
+        <button id="start-btn">Start Game</button>
+    </div>
+
+    <div id="instructions-screen" class="screen">
+        <div class="screen-header">
+            <button id="back-to-start-btn" class="back-button">← Back</button>
+            <h2>Instructions for the Teacher</h2>
+            <div class="header-spacer"></div>
+        </div>
+        <div class="instructions-text">
+            <p>1. Depending on the strength of your class, print and cut out that many feature action cards. Ensure that you have appropriate representations across the zones.</p>
+            <p>2. Give your students a feature card randomly from the printed cards.</p>
+            <p>3. Click the button below to start a 5-minute timer. During this time, students should try to memorize the words and where the zones are on the main diagram.</p>
+            <p>4. After the timer, they should read the clue on their feature card, guess their identity, and walk to the correct part of the room that you have marked.</p>
+            <p>5. Once students are in place, you can check if they are correct and have some fun depicting the different landforms!</p>
+        </div>
+        <button id="begin-study-btn">I Understand, Start Timer!</button>
+    </div>
+
+    <div id="study-screen" class="screen">
+        <div class="screen-header">
+            <button id="back-to-instructions-btn" class="back-button">← Back</button>
+            <h2>Memorize the Features!</h2>
+            <div class="header-spacer"></div>
+        </div>
+        <div id="timer">05:00</div>
+        <div id="ocean-map-container">
+            <img src="./Features of the ocean floor .png" alt="Map of the ocean floor features" id="ocean-map">
+        </div>
+    </div>
+
+    <div id="clue-screen" class="screen">
+        <div class="screen-header">
+            <button id="back-to-study-btn" class="back-button">← Back</button>
+            <h2>What Feature Are You? 🤔</h2>
+            <div class="header-spacer"></div>
+        </div>
+        <p>Find your clue below. When everyone is ready, click the button to reveal the answers.</p>
+        
+        <div id="clue-grid">
+            <div class="feature-card-container">
+                <div class="clue-card"><img src="./Continental Shelf.png" alt="Clue Card"></div>
+                <div class="answer-card"><img src="./Answer- Continental Shelf.png" alt="Answer Card"></div>
+            </div>
+            <div class="feature-card-container">
+                <div class="clue-card"><img src="./Continent slope .png" alt="Clue Card"></div>
+                <div class="answer-card"><img src="./Answer- Continental slope .png" alt="Answer Card"></div>
+            </div>
+            <div class="feature-card-container">
+                <div class="clue-card"><img src="./Mid-Ocean Ridge .png" alt="Clue Card"></div>
+                <div class="answer-card"><img src="./Answer- Mid-Ocean Ridge .png" alt="Answer Card"></div>
+            </div>
+            <div class="feature-card-container">
+                <div class="clue-card"><img src="./Abyssal Plain .png" alt="Clue Card"></div>
+                <div class="answer-card"><img src="./Answer- Abyssal Plain .png" alt="Answer Card"></div>
+            </div>
+            <div class="feature-card-container">
+                <div class="clue-card"><img src="./Shoreline.png" alt="Clue Card"></div>
+                <div class="answer-card"><img src="./Answer- Shoreline .png" alt="Answer Card"></div>
+            </div>
+            <div class="feature-card-container">
+                <div class="clue-card"><img src="./Seamount .png" alt="Clue Card"></div>
+                <div class="answer-card"><img src="./Answer- Seamount .png" alt="Answer Card"></div>
+            </div>
+            <div class="feature-card-container">
+                <div class="clue-card"><img src="./Guyot .png" alt="Clue Card"></div>
+                <div class="answer-card"><img src="./Answer- Guyot .png" alt="Answer Card"></div>
+            </div>
+            <div class="feature-card-container">
+                <div class="clue-card"><img src="./Trench.png" alt="Clue Card"></div>
+                <div class="answer-card"><img src="./Answer-Trench .png" alt="Answer Card"></div>
+            </div>
+        </div>
+
+        <div id="mobile-carousel-container">
+            <div id="mobile-carousel-window">
+                <div id="mobile-carousel-track">
+                    <div class="feature-card-container">
+                        <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <div class="clue-card"><img src="./Continental Shelf.png" alt="Clue Card"></div>
+                        <div class="answer-card"><img src="./Answer- Continental Shelf.png" alt="Answer Card"></div>
+                        <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
+                    </div>
+                    <div class="feature-card-container">
+                        <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <div class="clue-card"><img src="./Continent slope .png" alt="Clue Card"></div>
+                        <div class="answer-card"><img src="./Answer- Continental slope .png" alt="Answer Card"></div>
+                        <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
+                    </div>
+                    <div class="feature-card-container">
+                        <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <div class="clue-card"><img src="./Mid-Ocean Ridge .png" alt="Clue Card"></div>
+                        <div class="answer-card"><img src="./Answer- Mid-Ocean Ridge .png" alt="Answer Card"></div>
+                        <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
+                    </div>
+                    <div class="feature-card-container">
+                        <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <div class="clue-card"><img src="./Abyssal Plain .png" alt="Clue Card"></div>
+                        <div class="answer-card"><img src="./Answer- Abyssal Plain .png" alt="Answer Card"></div>
+                        <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
+                    </div>
+                    <div class="feature-card-container">
+                        <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <div class="clue-card"><img src="./Shoreline.png" alt="Clue Card"></div>
+                        <div class="answer-card"><img src="./Answer- Shoreline .png" alt="Answer Card"></div>
+                        <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
+                    </div>
+                    <div class="feature-card-container">
+                        <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <div class="clue-card"><img src="./Seamount .png" alt="Clue Card"></div>
+                        <div class="answer-card"><img src="./Answer- Seamount .png" alt="Answer Card"></div>
+                        <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
+                    </div>
+                    <div class="feature-card-container">
+                        <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <div class="clue-card"><img src="./Guyot .png" alt="Clue Card"></div>
+                        <div class="answer-card"><img src="./Answer- Guyot .png" alt="Answer Card"></div>
+                        <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
+                    </div>
+                    <div class="feature-card-container">
+                        <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <div class="clue-card"><img src="./Trench.png" alt="Clue Card"></div>
+                        <div class="answer-card"><img src="./Answer-Trench .png" alt="Answer Card"></div>
+                        <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="show-answers-btn">Click to Show All Answers</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let timerInterval = null; // To hold the timer interval ID
+
+            // --- Element Selectors ---
+            const screens = {
+                start: document.getElementById('start-screen'),
+                instructions: document.getElementById('instructions-screen'),
+                study: document.getElementById('study-screen'),
+                clue: document.getElementById('clue-screen')
+            };
+
+            const buttons = {
+                start: document.getElementById('start-btn'),
+                beginStudy: document.getElementById('begin-study-btn'),
+                showAnswers: document.getElementById('show-answers-btn'),
+                // New Back Buttons
+                backToStart: document.getElementById('back-to-start-btn'),
+                backToInstructions: document.getElementById('back-to-instructions-btn'),
+                backToStudy: document.getElementById('back-to-study-btn')
+            };
+            
+            const timerDisplay = document.getElementById('timer');
+            const track = document.getElementById('mobile-carousel-track');
+
+            // --- Navigation Logic ---
+            const showScreen = (screenName) => {
+                Object.values(screens).forEach(screen => screen.classList.remove('active'));
+                if (screens[screenName]) {
+                    screens[screenName].classList.add('active');
+                }
+            };
+
+            // Forward navigation
+            buttons.start?.addEventListener('click', () => showScreen('instructions'));
+            buttons.beginStudy?.addEventListener('click', () => {
+                showScreen('study');
+                startTimer(300, timerDisplay);
+            });
+
+            // Backward navigation
+            buttons.backToStart?.addEventListener('click', () => showScreen('start'));
+            buttons.backToInstructions?.addEventListener('click', () => {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                showScreen('instructions');
+            });
+            buttons.backToStudy?.addEventListener('click', () => showScreen('study'));
+            
+            // --- Answer Reveal Logic ---
+            buttons.showAnswers?.addEventListener('click', () => {
+                const answerCards = document.querySelectorAll('.answer-card');
+                answerCards.forEach(card => {
+                    card.classList.add('revealed');
+                    card.closest('.feature-card-container').classList.add('is-revealed');
+                });
+                buttons.showAnswers.style.display = 'none';
+            });
+
+            // --- Timer Function ---
+            function startTimer(duration, display) {
+                if (timerInterval) clearInterval(timerInterval);
+                let timer = duration;
+                const updateDisplay = () => {
+                    if (!display) return;
+                    let minutes = parseInt(timer / 60, 10);
+                    let seconds = parseInt(timer % 60, 10);
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+                    display.textContent = minutes + ":" + seconds;
+                };
+
+                updateDisplay();
+
+                timerInterval = setInterval(() => {
+                    timer--;
+                    updateDisplay();
+                    if (timer < 0) {
+                        clearInterval(timerInterval);
+                        showScreen('clue');
+                    }
+                }, 1000);
+            }
+
+            // --- Mobile Carousel Logic ---
+            if (track) {
+                const cards = Array.from(track.children);
+                let currentIndex = 0;
+
+                const updateNavButtons = () => {
+                    cards.forEach((card, index) => {
+                        const prevBtn = card.querySelector('.prev-nav');
+                        const nextBtn = card.querySelector('.next-nav');
+                        if (prevBtn && nextBtn) {
+                            prevBtn.style.display = (index === currentIndex && currentIndex > 0) ? 'flex' : 'none';
+                            nextBtn.style.display = (index === currentIndex && currentIndex < cards.length - 1) ? 'flex' : 'none';
+                        }
+                    });
+                };
+
+                const moveToCard = (targetIndex) => {
+                    if (!cards[targetIndex]) return;
+                    const cardWidth = cards[0].getBoundingClientRect().width;
+                    track.style.transform = `translateX(-${cardWidth * targetIndex}px)`;
+                    currentIndex = targetIndex;
+                    updateNavButtons();
+                };
+
+                cards.forEach((card) => {
+                    card.querySelector('.next-nav')?.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        moveToCard(currentIndex + 1);
+                    });
+                    card.querySelector('.prev-nav')?.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        moveToCard(currentIndex - 1);
+                    });
+                });
+                
+                moveToCard(0);
+                window.addEventListener('resize', () => moveToCard(currentIndex));
+            }
+        });
+    </script>
+</body>
+</html>
