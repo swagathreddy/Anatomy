@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-g">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ocean Floor Features Game</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,8 +47,8 @@
             font-weight: 700;
         }
 
-        h1 { font-size: 2.5em; }
-        h2 { font-size: 2em; }
+        h1 { font-size: 2.5em; margin: 20px 0; }
+        h2 { font-size: 2em; flex-grow: 1; text-align: center; margin: 0; padding: 0 10px; }
         #clue-screen .screen-header h2 { margin-bottom: 5px; }
 
         .instructions-text {
@@ -80,8 +80,8 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
-        
-        /* --- NEW: Header for Back Button and Title --- */
+
+        /* Header for Back Button and Title */
         .screen-header {
             width: 100%;
             display: flex;
@@ -98,7 +98,7 @@
             flex-shrink: 0;
         }
         
-        /* --- NEW: Back Button Styling --- */
+        /* Back Button Styling */
         .back-button {
             background: none;
             border: 2px solid #0d47a1;
@@ -115,7 +115,6 @@
             color: white;
             transform: none; /* Override global hover effect */
         }
-
 
         #timer {
             font-size: 3em;
@@ -138,6 +137,7 @@
             display: block;
         }
 
+        /* --- DESKTOP: Card Grid (Visible by default) --- */
         #clue-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -184,10 +184,13 @@
             transform: translateY(0);
         }
 
+        /* --- MOBILE: Carousel (Hidden by default) --- */
         #mobile-carousel-container {
             display: none;
         }
 
+
+        /* --- ALL MOBILE STYLES (Screen size 600px and below) --- */
         @media (max-width: 600px) {
             .screen { padding: 15px; }
             h1 { font-size: 2em; }
@@ -292,6 +295,7 @@
         <div id="ocean-map-container">
             <img src="./Features of the ocean floor .png" alt="Map of the ocean floor features" id="ocean-map">
         </div>
+        <button id="skip-to-clues-btn">Skip to Clues →</button>
     </div>
 
     <div id="clue-screen" class="screen">
@@ -399,7 +403,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             let timerInterval = null; // To hold the timer interval ID
 
-            // --- Element Selectors ---
             const screens = {
                 start: document.getElementById('start-screen'),
                 instructions: document.getElementById('instructions-screen'),
@@ -411,16 +414,15 @@
                 start: document.getElementById('start-btn'),
                 beginStudy: document.getElementById('begin-study-btn'),
                 showAnswers: document.getElementById('show-answers-btn'),
-                // New Back Buttons
                 backToStart: document.getElementById('back-to-start-btn'),
                 backToInstructions: document.getElementById('back-to-instructions-btn'),
-                backToStudy: document.getElementById('back-to-study-btn')
+                backToStudy: document.getElementById('back-to-study-btn'),
+                skipToClues: document.getElementById('skip-to-clues-btn') // NEW
             };
             
             const timerDisplay = document.getElementById('timer');
             const track = document.getElementById('mobile-carousel-track');
 
-            // --- Navigation Logic ---
             const showScreen = (screenName) => {
                 Object.values(screens).forEach(screen => screen.classList.remove('active'));
                 if (screens[screenName]) {
@@ -428,25 +430,25 @@
                 }
             };
 
-            // Forward navigation
+            // --- Navigation ---
             buttons.start?.addEventListener('click', () => showScreen('instructions'));
             buttons.beginStudy?.addEventListener('click', () => {
                 showScreen('study');
-                startTimer(300, timerDisplay);
+                startTimer(5 * 60, timerDisplay);
             });
-
-            // Backward navigation
             buttons.backToStart?.addEventListener('click', () => showScreen('start'));
             buttons.backToInstructions?.addEventListener('click', () => {
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
+                if (timerInterval) clearInterval(timerInterval);
                 showScreen('instructions');
             });
             buttons.backToStudy?.addEventListener('click', () => showScreen('study'));
             
-            // --- Answer Reveal Logic ---
+            // NEW Skip Button Logic
+            buttons.skipToClues?.addEventListener('click', () => {
+                if (timerInterval) clearInterval(timerInterval);
+                showScreen('clue');
+            });
+            
             buttons.showAnswers?.addEventListener('click', () => {
                 const answerCards = document.querySelectorAll('.answer-card');
                 answerCards.forEach(card => {
@@ -456,7 +458,6 @@
                 buttons.showAnswers.style.display = 'none';
             });
 
-            // --- Timer Function ---
             function startTimer(duration, display) {
                 if (timerInterval) clearInterval(timerInterval);
                 let timer = duration;
@@ -481,7 +482,6 @@
                 }, 1000);
             }
 
-            // --- Mobile Carousel Logic ---
             if (track) {
                 const cards = Array.from(track.children);
                 let currentIndex = 0;
