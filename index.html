@@ -57,6 +57,14 @@
             margin: 20px 0;
             line-height: 1.6;
         }
+        .instructions-text img {
+            display: block;
+            max-width: 450px;
+            width: 90%;
+            margin: 15px auto;
+            border-radius: 10px;
+            border: 3px solid #aed6f1;
+        }
         #clue-screen h2 + p {
             margin-top: 5px;
         }
@@ -272,15 +280,17 @@
     <div id="instructions-screen" class="screen">
         <div class="screen-header">
             <button id="back-to-start-btn" class="back-button">← Back</button>
-            <h2>Instructions for the Teacher</h2>
+            <h2>Instructions</h2>
             <div class="header-spacer"></div>
         </div>
         <div class="instructions-text">
-            <p>1. Depending on the strength of your class, print and cut out that many feature action cards. Ensure that you have appropriate representations across the zones.</p>
-            <p>2. Give your students a feature card randomly from the printed cards.</p>
-            <p>3. Click the button below to start a 5-minute timer. During this time, students should try to memorize the words and where the zones are on the main diagram.</p>
-            <p>4. After the timer, they should read the clue on their feature card, guess their identity, and walk to the correct part of the room that you have marked.</p>
-            <p>5. Once students are in place, you can check if they are correct and have some fun depicting the different landforms!</p>
+            <p>1. An illustration similar to this is drawn in the room or on the playground. Look at the illustration to see the main diagram with all the zones marked.</p>
+            <img src="./playground.png" alt="Example Diagram of Ocean Floor">
+            <p>2. Each of you will receive a feature card.</p>
+            <p>3. When the timer starts (5 minutes), study the words and the zones on the diagram carefully so you can remember them.</p>
+            <p>4. After the timer ends, read the clue on your card. Try to guess which zone or landform you belong to.</p>
+            <p>5. Walk to the correct spot in the room or playground that matches your clue.</p>
+            <p>6. Once everyone is in place, check your answers and act out the different landforms together!</p>
         </div>
         <button id="begin-study-btn">I Understand, Start Timer!</button>
     </div>
