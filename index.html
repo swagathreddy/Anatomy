@@ -57,7 +57,7 @@
             margin: 20px 0;
             line-height: 1.6;
         }
-        .instructions-text img {
+        .instructions-text > img {
             display: block;
             max-width: 450px;
             width: 90%;
@@ -68,6 +68,28 @@
         #clue-screen h2 + p {
             margin-top: 5px;
         }
+
+        /* --- STYLING FOR THE CARD PREVIEW ROW --- */
+        .feature-card-preview {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            overflow-x: auto; /* Enable horizontal scrolling on desktop */
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+        }
+        .feature-card-preview img {
+            height: 100px; /* Set a fixed height */
+            width: auto; /* Allow width to adjust automatically */
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            background-color: #fff;
+            object-fit: contain; /* Show the entire image without cropping */
+            flex-shrink: 0; /* Prevent images from shrinking on desktop */
+        }
+        /* --- END STYLING FOR CARD PREVIEW ROW --- */
 
         button {
             background: linear-gradient(45deg, #2196F3, #1565C0);
@@ -209,6 +231,18 @@
             .back-button { width: 80px; }
             #clue-grid { display: none; }
             
+            /* --- Card Preview Styling for Mobile --- */
+            .feature-card-preview {
+                flex-wrap: wrap; /* Allow wrapping into multiple rows */
+                overflow-x: visible; /* Disable horizontal scrolling */
+                justify-content: center; /* Center the cards */
+            }
+
+            .feature-card-preview img {
+                height: 75px; /* Make cards smaller for the 2x4 grid */
+            }
+            /* --- End Card Preview Styling for Mobile --- */
+
             #mobile-carousel-container {
                 display: flex;
                 width: 100%;
@@ -284,9 +318,19 @@
             <div class="header-spacer"></div>
         </div>
         <div class="instructions-text">
-            <p>1. Draw an illustration similar to the one mentioned below in the room or in the playground</p>
+            <p>1. Draw an illustration similar to the one mentioned below in the room or in the playground.</p>
             <img src="./playground.png" alt="Example Diagram of Ocean Floor">
-            <p>2. Each of you will receive a feature card.</p>
+            <p>2. Each of you will receive a feature card like the ones shown here:</p>
+            <div class="feature-card-preview">
+                <img src="./Continental Shelf.png" alt="Continental Shelf Card">
+                <img src="./Continent slope .png" alt="Continental Slope Card">
+                <img src="./Mid-Ocean Ridge .png" alt="Mid-Ocean Ridge Card">
+                <img src="./Abyssal Plain .png" alt="Abyssal Plain Card">
+                <img src="./Shoreline.png" alt="Shoreline Card">
+                <img src="./Seamount .png" alt="Seamount Card">
+                <img src="./Guyot .png" alt="Guyot Card">
+                <img src="./Trench.png" alt="Trench Card">
+            </div>
             <p>3. When the timer starts (5 minutes), study the words and the zones on the diagram carefully so you can remember them.</p>
             <p>4. After the timer ends, read the clue on your card. Try to guess which zone or landform you belong to.</p>
             <p>5. Walk to the correct spot in the room or playground that matches your clue.</p>
@@ -427,7 +471,7 @@
                 backToStart: document.getElementById('back-to-start-btn'),
                 backToInstructions: document.getElementById('back-to-instructions-btn'),
                 backToStudy: document.getElementById('back-to-study-btn'),
-                skipToClues: document.getElementById('skip-to-clues-btn') // NEW
+                skipToClues: document.getElementById('skip-to-clues-btn')
             };
             
             const timerDisplay = document.getElementById('timer');
@@ -453,7 +497,6 @@
             });
             buttons.backToStudy?.addEventListener('click', () => showScreen('study'));
             
-            // NEW Skip Button Logic
             buttons.skipToClues?.addEventListener('click', () => {
                 if (timerInterval) clearInterval(timerInterval);
                 showScreen('clue');
@@ -533,4 +576,3 @@
     </script>
 </body>
 </html>
-
