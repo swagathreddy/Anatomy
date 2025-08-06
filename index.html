@@ -222,6 +222,28 @@
         #mobile-carousel-container {
             display: none;
         }
+        
+        /* --- NEW: Final Answer Map Styling --- */
+        #final-answer-map-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 5px solid #4CAF50; /* Green to signify correct answers */
+            border-radius: 10px;
+            margin-top: 30px; /* More space after the cards */
+            background: #fff;
+        }
+        #final-answer-map {
+            width: 1200px; /* Same as the other map */
+            max-width: none;
+            height: auto;
+            display: block;
+        }
+        #final-answer-map-container h2 {
+           margin-top: 15px;
+           margin-bottom: 10px;
+           color: #155724; /* A dark green */
+           font-size: 1.8em;
+        }
 
 
         /* --- ALL MOBILE STYLES (Screen size 600px and below) --- */
@@ -230,7 +252,7 @@
             h1 { font-size: 2em; }
             h2 { font-size: 1.5em; }
             #timer { font-size: 2.5em; }
-            #ocean-map { width: 800px; }
+            #ocean-map, #final-answer-map { width: 800px; }
             .header-spacer { width: 80px; }
             .back-button { width: 100px; } /* Adjusted width */
             #clue-grid { display: none; }
@@ -325,14 +347,14 @@
             <p>1. Your teacher would have marked out the seafloor in your classroom or playground.</p>
             <p>2. When the teacher starts the timer, quickly memorize the different features of the ocean and try and match your action card to the feature of the ocean. </p>
             <div class="feature-card-preview">
-                <img src="./Continental Shelf.png" alt="Continental Shelf Card" onerror="this.src='https://placehold.co/200x150/aed6f1/0d47a1?text=Continental+Shelf'">
-                <img src="./Continent slope .png" alt="Continental Slope Card" onerror="this.src='https://placehold.co/200x150/aed6f1/0d47a1?text=Continental+Slope'">
-                <img src="./Mid-Ocean Ridge .png" alt="Mid-Ocean Ridge Card" onerror="this.src='https://placehold.co/200x150/aed6f1/0d47a1?text=Mid-Ocean+Ridge'">
-                <img src="./Abyssal Plain .png" alt="Abyssal Plain Card" onerror="this.src='https://placehold.co/200x150/aed6f1/0d47a1?text=Abyssal+Plain'">
-                <img src="./Shoreline.png" alt="Shoreline Card" onerror="this.src='https://placehold.co/200x150/aed6f1/0d47a1?text=Shoreline'">
-                <img src="./Seamount .png" alt="Seamount Card" onerror="this.src='https://placehold.co/200x150/aed6f1/0d47a1?text=Seamount'">
-                <img src="./Guyot .png" alt="Guyot Card" onerror="this.src='https://placehold.co/200x150/aed6f1/0d47a1?text=Guyot'">
-                <img src="./Trench.png" alt="Trench Card" onerror="this.src='https://placehold.co/200x150/aed6f1/0d47a1?text=Trench'">
+                <img src="./Continental Shelf.png" alt="Continental Shelf Card" onerror="this.src='https.placehold.co/200x150/aed6f1/0d47a1?text=Continental+Shelf'">
+                <img src="./Continent slope .png" alt="Continental Slope Card" onerror="this.src='https.placehold.co/200x150/aed6f1/0d47a1?text=Continental+Slope'">
+                <img src="./Mid-Ocean Ridge .png" alt="Mid-Ocean Ridge Card" onerror="this.src='https.placehold.co/200x150/aed6f1/0d47a1?text=Mid-Ocean+Ridge'">
+                <img src="./Abyssal Plain .png" alt="Abyssal Plain Card" onerror="this.src='https.placehold.co/200x150/aed6f1/0d47a1?text=Abyssal+Plain'">
+                <img src="./Shoreline.png" alt="Shoreline Card" onerror="this.src='https.placehold.co/200x150/aed6f1/0d47a1?text=Shoreline'">
+                <img src="./Seamount .png" alt="Seamount Card" onerror="this.src='https.placehold.co/200x150/aed6f1/0d47a1?text=Seamount'">
+                <img src="./Guyot .png" alt="Guyot Card" onerror="this.src='https.placehold.co/200x150/aed6f1/0d47a1?text=Guyot'">
+                <img src="./Trench.png" alt="Trench Card" onerror="this.src='https.placehold.co/200x150/aed6f1/0d47a1?text=Trench'">
             </div>
             <p>3. When the image disappears from the screen, the teacher signals you to run to the landform to which you belong. </p>
             <p>4. Remember to hold the position as shown in the card. Once you have taken your positions, the teacher will reveal the answers</p>
@@ -348,7 +370,7 @@
         </div>
         <div id="timer">02:00</div>
         <div id="ocean-map-container">
-            <img src="./image.png" alt="Map of the ocean floor features" id="ocean-map" onerror="this.src='https://placehold.co/1200x600/8ec5fc/0d47a1?text=Ocean+Floor+Map'">
+            <img src="./Features of the ocean floor .png" alt="Map of the ocean floor features" id="ocean-map" onerror="this.src='https.placehold.co/1200x600/8ec5fc/0d47a1?text=Ocean+Floor+Map'">
         </div>
         <button id="skip-to-clues-btn">Skip to Clues →</button>
     </div>
@@ -362,24 +384,30 @@
         <p id="clue-instructions">Find your clue below. When everyone is ready, click the button to reveal the answers.</p>
         
         <div id="clue-grid">
-            <!-- Cards will be populated by JS to avoid duplication -->
-        </div>
+            </div>
 
         <div id="mobile-carousel-container">
             <div id="mobile-carousel-window">
                 <div id="mobile-carousel-track">
-                    <!-- Cards will be populated by JS to avoid duplication -->
-                </div>
+                    </div>
             </div>
         </div>
 
         <button id="show-answers-btn">Click to Show All Answers</button>
+        
+        <div id="final-answer-map-container" style="display: none;">
+            <h2>Final Positions</h2>
+            <img src="image.png" alt="Final answer map showing all actions" id="final-answer-map" onerror="this.src='https.placehold.co/1200x600/d4edda/155724?text=Final+Answer+Map'">
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            let timerInterval = null; // To hold the timer interval ID
-            let areAnswersVisible = false; // State to track if answers are shown
+            let timerInterval = null; 
+            let areAnswersVisible = false;
+
+            // --- Carousel State ---
+            let carouselCurrentIndex = 0;
 
             const screens = {
                 start: document.getElementById('start-screen'),
@@ -402,8 +430,8 @@
             const clueGrid = document.getElementById('clue-grid');
             const mobileTrack = document.getElementById('mobile-carousel-track');
             const clueInstructions = document.getElementById('clue-instructions');
+            const finalAnswerMapContainer = document.getElementById('final-answer-map-container');
 
-            // --- Data for Cards ---
             const features = [
                 { clue: './Continental Shelf.png', answer: './Answer- Continental Shelf.png', alt: 'Continental Shelf' },
                 { clue: './Continent slope .png', answer: './Answer- Continental slope .png', alt: 'Continental Slope' },
@@ -415,12 +443,23 @@
                 { clue: './Trench.png', answer: './Answer-Trench .png', alt: 'Trench' }
             ];
 
-            // --- Function to Create Card HTML ---
+            // --- Carousel Control Function (now in a higher scope) ---
+            const moveToCard = (targetIndex) => {
+                if (!mobileTrack || !mobileTrack.clientWidth || features.length === 0) return;
+                
+                // Ensure index is within bounds
+                const newIndex = Math.max(0, Math.min(targetIndex, features.length - 1));
+                
+                const cardWidth = mobileTrack.clientWidth;
+                mobileTrack.style.transform = `translateX(-${cardWidth * newIndex}px)`;
+                carouselCurrentIndex = newIndex;
+            };
+
             function createCardHTML(feature) {
                 return `
                     <div class="feature-card-container">
-                        <div class="clue-card"><img src="${feature.clue}" alt="Clue for ${feature.alt}" onerror="this.src='https://placehold.co/400x300/ffffff/333?text=${feature.alt.replace(/\s/g, '+')}+Clue'"></div>
-                        <div class="answer-card"><img src="${feature.answer}" alt="Answer for ${feature.alt}" onerror="this.src='https://placehold.co/400x300/d4edda/155724?text=${feature.alt.replace(/\s/g, '+')}+Answer'"></div>
+                        <div class="clue-card"><img src="${feature.clue}" alt="Clue for ${feature.alt}" onerror="this.src='https.placehold.co/400x300/ffffff/333?text=${feature.alt.replace(/\s/g, '+')}+Clue'"></div>
+                        <div class="answer-card"><img src="${feature.answer}" alt="Answer for ${feature.alt}" onerror="this.src='https.placehold.co/400x300/d4edda/155724?text=${feature.alt.replace(/\s/g, '+')}+Answer'"></div>
                     </div>`;
             }
             
@@ -428,17 +467,16 @@
                  return `
                     <div class="feature-card-container">
                         <button class="nav-button prev-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
-                        <div class="clue-card"><img src="${feature.clue}" alt="Clue for ${feature.alt}" onerror="this.src='https://placehold.co/400x300/ffffff/333?text=${feature.alt.replace(/\s/g, '+')}+Clue'"></div>
-                        <div class="answer-card"><img src="${feature.answer}" alt="Answer for ${feature.alt}" onerror="this.src='https://placehold.co/400x300/d4edda/155724?text=${feature.alt.replace(/\s/g, '+')}+Answer'"></div>
+                        <div class="clue-card"><img src="${feature.clue}" alt="Clue for ${feature.alt}" onerror="this.src='https.placehold.co/400x300/ffffff/333?text=${feature.alt.replace(/\s/g, '+')}+Clue'"></div>
+                        <div class="answer-card"><img src="${feature.answer}" alt="Answer for ${feature.alt}" onerror="this.src='https.placehold.co/400x300/d4edda/155724?text=${feature.alt.replace(/\s/g, '+')}+Answer'"></div>
                         <button class="nav-button next-nav"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></button>
                     </div>`;
             }
 
-            // --- Populate Cards ---
             function populateCards() {
                 clueGrid.innerHTML = features.map(createCardHTML).join('');
                 mobileTrack.innerHTML = features.map(createMobileCardHTML).join('');
-                setupCarousel(); // Re-setup carousel after populating
+                setupCarousel(); 
             }
 
             const showScreen = (screenName) => {
@@ -446,7 +484,6 @@
                 if (screens[screenName]) {
                     screens[screenName].classList.add('active');
                 }
-                // Reset the clue screen to its initial state whenever we navigate to it
                 if (screenName === 'clue') {
                     hideAllAnswers();
                 }
@@ -459,16 +496,19 @@
                     container.querySelector('.answer-card').classList.remove('revealed');
                 });
                 buttons.showAnswers.style.display = 'block';
-                clueInstructions.style.display = 'block'; // Show instructions
-                buttons.backToStudy.textContent = '← Back'; // Reset button text
+                clueInstructions.style.display = 'block'; 
+                buttons.backToStudy.textContent = '← Back';
                 areAnswersVisible = false;
+
+                if (finalAnswerMapContainer) {
+                    finalAnswerMapContainer.style.display = 'none';
+                }
             };
 
-            // --- Navigation ---
             buttons.start?.addEventListener('click', () => showScreen('instructions'));
             buttons.beginStudy?.addEventListener('click', () => {
                 showScreen('study');
-                startTimer(120, timerDisplay); // 2 minutes
+                startTimer(120, timerDisplay);
             });
             buttons.backToStart?.addEventListener('click', () => showScreen('start'));
             buttons.backToInstructions?.addEventListener('click', () => {
@@ -476,12 +516,11 @@
                 showScreen('instructions');
             });
             
-            // --- MODIFIED BACK BUTTON LOGIC ---
             buttons.backToStudy?.addEventListener('click', () => {
                 if (areAnswersVisible) {
-                    hideAllAnswers(); // If answers are shown, hide them
+                    hideAllAnswers();
                 } else {
-                    showScreen('study'); // Otherwise, go back to the study screen
+                    showScreen('study');
                 }
             });
             
@@ -490,17 +529,23 @@
                 showScreen('clue');
             });
             
-            // --- MODIFIED SHOW ANSWERS LOGIC ---
             buttons.showAnswers?.addEventListener('click', () => {
+                // Reset mobile carousel to the start before showing answers
+                moveToCard(0);
+
                 const answerCards = document.querySelectorAll('.answer-card');
                 answerCards.forEach(card => {
                     card.classList.add('revealed');
                     card.closest('.feature-card-container').classList.add('is-revealed');
                 });
-                buttons.showAnswers.style.display = 'none'; // Hide the button
-                clueInstructions.style.display = 'none'; // Hide the instruction text
-                buttons.backToStudy.textContent = 'Hide Answers'; // Change back button text
+                buttons.showAnswers.style.display = 'none';
+                clueInstructions.style.display = 'none';
+                buttons.backToStudy.textContent = 'Hide Answers';
                 areAnswersVisible = true;
+                
+                if (finalAnswerMapContainer) {
+                    finalAnswerMapContainer.style.display = 'block';
+                }
             });
 
             function startTimer(duration, display) {
@@ -514,9 +559,7 @@
                     seconds = seconds < 10 ? "0" + seconds : seconds;
                     display.textContent = minutes + ":" + seconds;
                 };
-
                 updateDisplay();
-
                 timerInterval = setInterval(() => {
                     timer--;
                     updateDisplay();
@@ -527,14 +570,11 @@
                 }, 1000);
             }
 
-            // --- Mobile Carousel Logic ---
             function setupCarousel() {
-                 if (!mobileTrack) return;
+                if (!mobileTrack) return;
                 const cards = Array.from(mobileTrack.children);
                 if (cards.length === 0) return;
                 
-                let currentIndex = 0;
-
                 const updateNavButtons = () => {
                     cards.forEach((card, index) => {
                         const prevBtn = card.querySelector('.prev-nav');
@@ -544,27 +584,19 @@
                     });
                 };
 
-                const moveToCard = (targetIndex) => {
-                    const cardWidth = mobileTrack.clientWidth;
-                    mobileTrack.style.transform = `translateX(-${cardWidth * targetIndex}px)`;
-                    currentIndex = targetIndex;
-                };
-
                 mobileTrack.addEventListener('click', (e) => {
                     if (e.target.closest('.next-nav')) {
-                        moveToCard(currentIndex + 1);
+                        moveToCard(carouselCurrentIndex + 1);
                     } else if (e.target.closest('.prev-nav')) {
-                        moveToCard(currentIndex - 1);
+                        moveToCard(carouselCurrentIndex - 1);
                     }
                 });
                 
-                // Initial setup
                 moveToCard(0);
-                updateNavButtons(); // This is for initial state
-                window.addEventListener('resize', () => moveToCard(currentIndex));
+                updateNavButtons();
+                window.addEventListener('resize', () => moveToCard(carouselCurrentIndex));
             }
 
-            // Initialize the game
             populateCards();
         });
     </script>
